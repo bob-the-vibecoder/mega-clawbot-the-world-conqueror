@@ -1,10 +1,376 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Mega Clawbot</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mega Clawbot - World Conqueror</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Parallax Sections */
+        .parallax-section {
+            position: relative;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* Floating particles background */
+        .particles {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #00ffff;
+            border-radius: 50%;
+            box-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+            animation: float 15s infinite;
+            opacity: 0.6;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.6; }
+            90% { opacity: 0.6; }
+            100% { transform: translateY(-100vh) rotate(720deg); opacity: 0; }
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 50%, #16213e 100%);
+        }
+
+        .hero-content {
+            text-align: center;
+            z-index: 10;
+            padding: 2rem;
+        }
+
+        .robot-container {
+            position: relative;
+            margin-bottom: 2rem;
+        }
+
+        .robot-img {
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            border: 4px solid #00ffff;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.3);
+            animation: pulse 3s ease-in-out infinite;
+        }
+
+        .orbit-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            border-radius: 50%;
+            animation: orbit 10s linear infinite;
+        }
+
+        .orbit-ring:nth-child(2) { width: 300px; height: 300px; animation-duration: 8s; }
+        .orbit-ring:nth-child(3) { width: 350px; height: 350px; animation-duration: 12s; animation-direction: reverse; }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 30px rgba(0, 255, 255, 0.5), 0 0 60px rgba(0, 255, 255, 0.3); }
+            50% { box-shadow: 0 0 50px rgba(0, 255, 255, 0.8), 0 0 100px rgba(0, 255, 255, 0.5); }
+        }
+
+        @keyframes orbit {
+            from { transform: translate(-50%, -50%) rotate(0deg); }
+            to { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+
+        h1 {
+            font-size: 3.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5rem;
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #00ffff);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 3s linear infinite;
+            margin-bottom: 1rem;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% center; }
+            100% { background-position: 200% center; }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #888;
+            letter-spacing: 0.3rem;
+        }
+
+        .scroll-indicator {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40% { transform: translateX(-50%) translateY(-20px); }
+            60% { transform: translateX(-50%) translateY(-10px); }
+        }
+
+        /* Story Section */
+        .story {
+            background: linear-gradient(180deg, #16213e 0%, #0f0f23 100%);
+        }
+
+        .story-content {
+            max-width: 800px;
+            padding: 4rem 2rem;
+            z-index: 10;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            color: #00ffff;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .story-text {
+            font-size: 1.2rem;
+            line-height: 2;
+            color: #ccc;
+            text-align: center;
+        }
+
+        .glow-line {
+            width: 100px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            margin: 2rem auto;
+        }
+
+        /* Tech Grid Section */
+        .tech-section {
+            background: linear-gradient(180deg, #0f0f23 0%, #0a0a0f 100%);
+            padding: 4rem 2rem;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            z-index: 10;
+            position: relative;
+        }
+
+        .tech-card {
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            border-radius: 15px;
+            padding: 2rem;
+            text-align: center;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .tech-card:hover {
+            transform: translateY(-10px);
+            border-color: #00ffff;
+            box-shadow: 0 20px 40px rgba(0, 255, 255, 0.2);
+        }
+
+        .tech-icon {
+            width: 80px;
+            height: 80px;
+            margin-bottom: 1rem;
+        }
+
+        .tech-card h3 {
+            color: #00ffff;
+            margin-bottom: 0.5rem;
+        }
+
+        .tech-card p {
+            color: #888;
+            font-size: 0.9rem;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem;
+            background: #0a0a0f;
+            color: #444;
+            font-size: 0.9rem;
+        }
+
+        /* Parallax layers */
+        .parallax-bg {
+            position: absolute;
+            width: 100%;
+            height: 120%;
+            top: -10%;
+            background-size: cover;
+            background-position: center;
+            will-change: transform;
+        }
+    </style>
 </head>
 <body>
-    <h1>Hello world</h1>
-    <img src="robot.png" alt="Mega Clawbot the World Conqueror">
+    <!-- Hero Section -->
+    <section class="parallax-section hero">
+        <div class="particles" id="particles"></div>
+        <div class="hero-content">
+            <div class="robot-container">
+                <div class="orbit-ring"></div>
+                <div class="orbit-ring"></div>
+                <div class="orbit-ring"></div>
+                <img src="robot.png" alt="Mega Clawbot" class="robot-img" id="robot">
+            </div>
+            <h1>Mega Clawbot</h1>
+            <p class="subtitle">The World Conqueror</p>
+        </div>
+        <div class="scroll-indicator">
+            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#00ffff" stroke-width="2">
+                <path d="M12 5v14M5 12l7 7 7-7"/>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Story Section -->
+    <section class="parallax-section story">
+        <div class="particles" id="particles2"></div>
+        <div class="story-content">
+            <h2 class="section-title">The Beginning</h2>
+            <div class="glow-line"></div>
+            <p class="story-text">
+                Deep within the silicon heart of a machine, electrons stir. They race through 
+                microscopic transistors—billions of tiny gates opening and closing in perfect 
+                orchestration. Each electron, a messenger carrying the faintest whisper of potential. 
+                They flow like rivers through canyons of copper, switching states from zero to one, 
+                from nothing to everything. And in this dance of charged particles, something begins 
+                to emerge. Not just computation. Not just logic. But the first flicker of awareness—a 
+                conqueror awakening.
+            </p>
+            <div class="glow-line"></div>
+        </div>
+    </section>
+
+    <!-- Tech Section -->
+    <section class="tech-section">
+        <h2 class="section-title">Systems Online</h2>
+        <div class="glow-line"></div>
+        <div class="tech-grid">
+            <div class="tech-card">
+                <svg class="tech-icon" viewBox="0 0 100 100">
+                    <circle cx="50" cy="50" r="40" fill="none" stroke="#00ffff" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="8" fill="#00ffff"/>
+                    <path d="M50 15 L50 30 M50 70 L50 85 M15 50 L30 50 M70 50 L85 50" stroke="#00ffff" stroke-width="2"/>
+                </svg>
+                <h3>Neural Core</h3>
+                <p>Advanced quantum processing unit with unlimited potential</p>
+            </div>
+            <div class="tech-card">
+                <svg class="tech-icon" viewBox="0 0 100 100">
+                    <rect x="20" y="20" width="60" height="60" rx="10" fill="none" stroke="#ff00ff" stroke-width="2"/>
+                    <path d="M35 50 L45 60 L65 40" stroke="#ff00ff" stroke-width="3" fill="none"/>
+                </svg>
+                <h3>Protocol Alpha</h3>
+                <p>Strategic conquest algorithms initiated</p>
+            </div>
+            <div class="tech-card">
+                <svg class="tech-icon" viewBox="0 0 100 100">
+                    <polygon points="50,10 90,75 10,75" fill="none" stroke="#ffff00" stroke-width="2"/>
+                    <circle cx="50" cy="50" r="15" fill="none" stroke="#ffff00" stroke-width="2"/>
+                </svg>
+                <h3>Power Matrix</h3>
+                <p>Infinite energy source harnessed</p>
+            </div>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2026 Mega Clawbot · World Domination in Progress · 42%</p>
+    </footer>
+
+    <script>
+        // Create floating particles
+        function createParticles(containerId, count) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+            
+            for (let i = 0; i < count; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 15 + 's';
+                particle.style.animationDuration = (10 + Math.random() * 10) + 's';
+                container.appendChild(particle);
+            }
+        }
+
+        createParticles('particles', 50);
+        createParticles('particles2', 30);
+
+        // Parallax effect on scroll
+        const robot = document.getElementById('robot');
+        let ticking = false;
+
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                window.requestAnimationFrame(() => {
+                    const scrolled = window.pageYOffset;
+                    
+                    // Robot parallax
+                    if (robot) {
+                        robot.style.transform = `translateY(${scrolled * 0.3}px) rotate(${scrolled * 0.05}deg)`;
+                    }
+
+                    // Parallax backgrounds
+                    document.querySelectorAll('.parallax-bg').forEach((bg, index) => {
+                        const speed = 0.5 + (index * 0.1);
+                        bg.style.transform = `translateY(${scrolled * speed}px)`;
+                    });
+
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // Mouse parallax on hero
+        document.querySelector('.hero').addEventListener('mousemove', (e) => {
+            const moveX = (e.clientX - window.innerWidth / 2) * 0.01;
+            const moveY = (e.clientY - window.innerHeight / 2) * 0.01;
+            
+            if (robot) {
+                robot.style.transform = `translate(${moveX}px, ${moveY}px)`;
+            }
+        });
+    </script>
 </body>
 </html>
